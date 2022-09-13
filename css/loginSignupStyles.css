@@ -42,7 +42,8 @@ form {
     background-color: var(--negro);
     max-width: 24rem;
     margin: 0 auto;
-    padding: 2rem 3rem;
+    border: 3px solid #424242;
+    padding: 3rem;
     border-radius: 1rem;
     display: flex;
     flex-direction: column;

@@ -35,6 +35,7 @@ window.addEventListener("load", function () {
   /*                    FUNCIÓN 4 - Crear nueva tarea [POST]                    */
   /* -------------------------------------------------------------------------- */
 
+  const formCrearTarea = document.forms[0];
   formCrearTarea.addEventListener("submit", function (event) {});
 
   /* -------------------------------------------------------------------------- */
