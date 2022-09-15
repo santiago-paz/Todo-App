@@ -15,21 +15,25 @@ window.addEventListener("load", function () {
   /*                          FUNCIÓN 1 - Cerrar sesión                         */
   /* -------------------------------------------------------------------------- */
 
-  // btnCerrarSesion.addEventListener('click', function () {
+  btnCerrarSesion.addEventListener('click', function () {
 
-  // });
+  });
 
   /* -------------------------------------------------------------------------- */
   /*                 FUNCIÓN 2 - Obtener nombre de usuario [GET]                */
   /* -------------------------------------------------------------------------- */
 
-  function obtenerNombreUsuario() {}
+  function obtenerNombreUsuario() {
+
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                 FUNCIÓN 3 - Obtener listado de tareas [GET]                */
   /* -------------------------------------------------------------------------- */
 
-  function consultarTareas() {}
+  function consultarTareas() {
+    
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                    FUNCIÓN 4 - Crear nueva tarea [POST]                    */
