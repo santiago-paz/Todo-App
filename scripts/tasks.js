@@ -11,12 +11,18 @@ if (!jwt) {
 window.addEventListener("load", function () {
   /* ---------------- variables globales y llamado a funciones ---------------- */
 
+  const btnCerrarSesion = this.document.getElementById("closeApp");
   /* -------------------------------------------------------------------------- */
   /*                          FUNCIÓN 1 - Cerrar sesión                         */
   /* -------------------------------------------------------------------------- */
 
-  btnCerrarSesion.addEventListener('click', function () {
+  btnCerrarSesion.addEventListener("click", function () {
+    const confirmacionCerrarSesion = confirm("Desea cerrar sesión?");
 
+    if (confirmacionCerrarSesion) {
+      localStorage.removeItem("jwt");
+      location.replace("./");
+    }
   });
 
   /* -------------------------------------------------------------------------- */
@@ -24,28 +30,85 @@ window.addEventListener("load", function () {
   /* -------------------------------------------------------------------------- */
 
   function obtenerNombreUsuario() {
+    const url = "https://ctd-todo-api.herokuapp.com/v1/users/getMe",
+      configuraciones = {
+        method: "GET",
+        headers: {
+          authorization: jwt,
+        },
+      };
 
+    fetch(url, configuraciones)
+      .then((respuesta) => respuesta.json())
+      .then((data) => {
+        console.log(data);
+        document.getElementById(
+          "username"
+        ).innerText = `${data.firstName} ${data.lastName}`;
+      });
   }
+  obtenerNombreUsuario();
 
   /* -------------------------------------------------------------------------- */
   /*                 FUNCIÓN 3 - Obtener listado de tareas [GET]                */
   /* -------------------------------------------------------------------------- */
 
   function consultarTareas() {
-    
+    const url = "https://ctd-todo-api.herokuapp.com/v1/tasks",
+      configuraciones = {
+        method: "GET",
+        headers: {
+          authorization: jwt,
+        },
+      };
+
+    fetch(url, configuraciones)
+      .then((respuesta) => respuesta.json())
+      .then((data) => {
+        renderizarTareas(data)
+      });
   }
+  consultarTareas();
 
   /* -------------------------------------------------------------------------- */
   /*                    FUNCIÓN 4 - Crear nueva tarea [POST]                    */
   /* -------------------------------------------------------------------------- */
 
   const formCrearTarea = document.forms[0];
-  formCrearTarea.addEventListener("submit", function (event) {});
+  formCrearTarea.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const url = "https://ctd-todo-api.herokuapp.com/v1/tasks";
+    const inputDescription = document.getElementById("nuevaTarea");
+
+    configuraciones = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: jwt,
+      },
+      body: JSON.stringify({
+        description: inputDescription.value,
+        completed: false,
+      }),
+    };
+
+    inputDescription.value = ""
+    inputDescription.focus();
+
+    fetch(url, configuraciones)
+      .then((response) => response.json())
+      .then((data) => {
+        consultarTareas()
+      });
+  });
 
   /* -------------------------------------------------------------------------- */
   /*                  FUNCIÓN 5 - Renderizar tareas en pantalla                 */
   /* -------------------------------------------------------------------------- */
-  function renderizarTareas(listado) {}
+  function renderizarTareas(listado) {
+
+
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                  FUNCIÓN 6 - Cambiar estado de tarea [PUT]                 */
