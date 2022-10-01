@@ -14,7 +14,7 @@ Este proyecto es la oportunidad de repasar todo lo aprendido y poner en práctic
 ## API Docs
 
 Link con la documentación de los endpoints de la API y su funcionamiento:
-https://ctd-todo-api.herokuapp.com/
+https://ctd-fe2-todo-v2.herokuapp.com/v1
 
 ## Requerimientos funcionales en pantalla de Login
 

@@ -3,19 +3,17 @@ function compararContrasenias(contrasenia_1, contrasenia_2) {
 }
 
 window.addEventListener("load", function () {
-  /* ---------------------- obtenemos variables globales ---------------------- */
-
-  const form = document.forms[0],
-    nombre = document.getElementById("inputNombre"),
-    apellido = document.getElementById("inputApellido"),
-    email = document.getElementById("inputEmail"),
-    password = document.getElementById("inputPassword"),
-    passwordRepetida = document.getElementById("inputPasswordRepetida");
-
   /* -------------------------------------------------------------------------- */
   /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
   /* -------------------------------------------------------------------------- */
+  const form = document.forms[0]
   form.addEventListener("submit", function (event) {
+    const nombre = document.getElementById("inputNombre"),
+      apellido = document.getElementById("inputApellido"),
+      email = document.getElementById("inputEmail"),
+      password = document.getElementById("inputPassword"),
+      passwordRepetida = document.getElementById("inputPasswordRepetida");
+
     event.preventDefault();
 
     const payload = {
@@ -28,9 +26,8 @@ window.addEventListener("load", function () {
     if (compararContrasenias(password.value, passwordRepetida.value)) {
       realizarRegister(payload);
     } else {
-      alert('Las contraseñas no son iguales.')
+      alert('Error: Las contraseñas no coinciden.')
     }
-
   });
 
   /* -------------------------------------------------------------------------- */
@@ -45,10 +42,7 @@ window.addEventListener("load", function () {
       },
     };
 
-    fetch("https://ctd-todo-api.herokuapp.com/v1/users", configuraciones)
-      /* .then(function(response) {
-        return response.json()
-      }) */
+    fetch("https://ctd-fe2-todo-v2.herokuapp.com/v1/users", configuraciones)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -56,9 +50,9 @@ window.addEventListener("load", function () {
           alert("Alguno de los datos es incorrecto");
         }
       })
-      .then(function (jsonResponse) {
-        if (jsonResponse.jwt) {
-          localStorage.setItem("jwt", jsonResponse.jwt);
+      .then(function (response) {
+        if (response.jwt) {
+          localStorage.setItem("jwt", response.jwt);
           location.replace("./mis-tareas.html");
         }
       })

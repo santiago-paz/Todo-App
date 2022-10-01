@@ -1,4 +1,11 @@
-// evaluar si hay un token para mandarlo directo a sus tareas
+// Evaluar si hay un token para mandarlo directo a sus tareas
+const jwt = localStorage.getItem("jwt");
+
+if (jwt) {
+  // Usamos el replace para no guardar en el historial la url anterior
+  location.replace("/mis-tareas.html");
+}
+
 window.addEventListener("load", function () {
   const form = document.forms[0];
   /* -------------------------------------------------------------------------- */
@@ -22,8 +29,7 @@ window.addEventListener("load", function () {
   /*                     FUNCIÓN 2: Realizar el login [POST]                    */
   /* -------------------------------------------------------------------------- */
   function realizarLogin(user) {
-    const apiURL = "https://ctd-todo-api.herokuapp.com/v1/users/login";
-
+    const apiURL = "https://ctd-fe2-todo-v2.herokuapp.com/v1/users/login";
     const configuraciones = {
       method: "POST",
       headers: {
