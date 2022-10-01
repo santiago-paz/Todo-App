@@ -7,26 +7,44 @@ if (!jwt) {
   location.replace("/");
 }
 
+AOS.init();
 /* ------ Comienzan las funcionalidades una vez que carga el documento ------ */
 window.addEventListener("load", function () {
+
+  const apiURL = "https://ctd-fe2-todo-v2.herokuapp.com/v1";
+
   /* -------------------------------------------------------------------------- */
   /*                          FUNCIÓN 1 - Cerrar sesión                         */
   /* -------------------------------------------------------------------------- */
   const btnCerrarSesion = this.document.getElementById("closeApp");
   btnCerrarSesion.addEventListener("click", function () {
-    const confirmacionCerrarSesion = confirm("Desea cerrar sesión?");
-
-    if (confirmacionCerrarSesion) {
+    /* const confirmacionCerrarSesion = confirm("Desea cerrar sesión?"); */
+    /* if (confirmacionCerrarSesion) {
       localStorage.removeItem("jwt");
       location.replace("./");
-    }
+    } */
+
+    Swal.fire({
+      title: '¿Estás seguro que querés cerrar sesión?',
+      icon: 'question',
+      showCancelButton: true,
+      confimButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar',
+    }).then(result => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("jwt");
+        location.replace("./");
+      }
+    })
   });
 
   /* -------------------------------------------------------------------------- */
   /*                 FUNCIÓN 2 - Obtener nombre de usuario [GET]                */
   /* -------------------------------------------------------------------------- */
   function obtenerNombreUsuario() {
-    const url = "https://ctd-fe2-todo-v2.herokuapp.com/v1/users/getMe",
+    const url = `${apiURL}/users/getMe`,
       configuraciones = {
         method: "GET",
         headers: {
@@ -49,7 +67,7 @@ window.addEventListener("load", function () {
   /*                 FUNCIÓN 3 - Obtener listado de tareas [GET]                */
   /* -------------------------------------------------------------------------- */
   function consultarTareas() {
-    const url = "https://ctd-fe2-todo-v2.herokuapp.com/v1/tasks",
+    const url = `${apiURL}/tasks`,
       configuraciones = {
         method: "GET",
         headers: {
@@ -73,7 +91,7 @@ window.addEventListener("load", function () {
   const formCrearTarea = document.forms[0];
   formCrearTarea.addEventListener("submit", function (event) {
     event.preventDefault();
-    const url = "https://ctd-fe2-todo-v2.herokuapp.com/v1/tasks";
+    const url = `${apiURL}/tasks`
     const inputDescription = document.getElementById("nuevaTarea");
 
     configuraciones = {
@@ -112,6 +130,7 @@ window.addEventListener("load", function () {
       li.classList.add("tarea");
       if (tarea.completed) {
         li.setAttribute("data-aos", "fade-up");
+
         li.innerHTML = `<div class="hecha">
 				<i class="fa-regular fa-circle-check"></i>
 			</div>
@@ -146,7 +165,7 @@ window.addEventListener("load", function () {
       //a cada boton le asignamos una funcionalidad
       boton.addEventListener('click', function (event) {
         const id = event.target.id;
-        const url = `https://ctd-fe2-todo-v2.herokuapp.com/v1/tasks/${id}`
+        const url = `${apiURL}/tasks/${id}`
         const payload = {};
 
         if (event.target.classList.contains('completa')) {
@@ -183,24 +202,35 @@ window.addEventListener("load", function () {
 
     btnBorrarTarea.forEach(boton => {
       boton.addEventListener('click', function (event) {
-        const deleteConfirmation = confirm('Estás seguro que querés borrar esta tarea?')
+        /* const deleteConfirmation = confirm('Estás seguro que querés borrar esta tarea?') */
+        /* if (deleteConfirmation) { */
 
-        if (deleteConfirmation) {
-          const id = event.target.id;
-          const url = `https://ctd-fe2-todo-v2.herokuapp.com/v1/tasks/${id}`
+        Swal.fire({
+          title: '¿Estás seguro que querés borrar esta tarea?',
+          icon: 'question',
+          showCancelButton: true,
+          confimButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirmar',
+          cancelButtonText: 'Cancelar',
+        }).then(result => {
+          if (result.isConfirmed) {
+            const id = event.target.id;
+            const url = `${apiURL}/tasks/${id}`
 
-          const settingsCambio = {
-            method: 'DELETE',
-            headers: {
-              "Authorization": jwt,
+            const settingsCambio = {
+              method: 'DELETE',
+              headers: {
+                "Authorization": jwt,
+              }
             }
+            fetch(url, settingsCambio)
+              .then(response => {
+                console.log(response.status);
+                consultarTareas();
+              })
           }
-          fetch(url, settingsCambio)
-            .then(response => {
-              console.log(response.status);
-              consultarTareas();
-            })
-        }
+        })
       })
     });
   }
